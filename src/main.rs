@@ -1,8 +1,6 @@
 use std::io;
-
-fn end() {
-    main();
-}
+use std::fs;
+use colored::Colorize;
 
 fn completed_logs() {
     println!("this is a incomplete function");
@@ -17,43 +15,50 @@ fn add_items() {
 }
 
 fn view_items() {
-    println!("this is a incomplete function");
+
+    let info = "this is your ongoing items at the moment".blue();
+    println!("{}", info);
+    
+    let content: String = fs::read_to_string("todo.txt")
+    .expect("File is missing from the directory!");
+
+    println!("{content}");
+
 }
 
 fn menu_list() {
-    println!("1. View ongoing stuff");
-    println!("2. Add ongoing stuff");
-    println!("3. Delete ongoing stuff");
-    println!("4. Check completed logs!");
-    println!("5. End the program");
 
-    let mut choice = String::new();
-
-    io::stdin()
-        .read_line(&mut choice)
-        .expect("There was an issue when trying to get the choice info from user!");
-
-    let choice: char = choice
-        .trim()
-        .parse()
-        .expect("missing value from previous function!");
-
-    match choice {
-        '1' => view_items(),
-        '2' => add_items(),
-        '3' => delete_items(),
-        '4' => completed_logs(),
-        '5' => end(),
-        _ => println!("you have entered an invalid number, please enter the correct number"),
-    }
+        println!("1. View ongoing stuff");
+        println!("2. Add ongoing stuff");
+        println!("3. Delete ongoing stuff");
+        println!("4. Check completed logs!");
+        println!("5. End the program");
+    
+        let mut choice = String::new();
+    
+        io::stdin()
+            .read_line(&mut choice)
+            .expect("There was an issue when trying to get the choice info from user!");
+    
+        let choice: char = choice
+            .trim()
+            .parse()
+            .expect("missing value from previous function!");
+    
+        match choice {
+            '1' => view_items(),
+            '2' => add_items(),
+            '3' => delete_items(),
+            '4' => completed_logs(),
+            '5' => println!("thanks for using the system!"),
+            _ => println!("you have entered an invalid number, please enter the correct number"),
+        }    
+    
 }
 
 fn main() {
     println!("Hello welcome to the todoifier!");
     println!("what would you like to do today?");
-
-
-    
     menu_list();
 }
 
