@@ -1,11 +1,45 @@
 use colored::Colorize;
 use std::fs;
+use std::fs::File;
 use std::fs::OpenOptions;
 use std::io;
+use std::io::Read;
 use std::io::Write;
 
 fn completed_logs() {
-    println!("this is a incomplete function");
+    let notice = "welcome to the completed logs menu".blue();
+    println!("{}", notice);
+
+    let mut task = String::new();
+
+    println!("please add the task that you have completed:  ");
+
+    io::stdin()
+        .read_line(&mut task)
+        .expect("there was an issue at input stage");
+
+    let mut file = match File::open("completed.txt") {
+        Ok(file) => file,
+        Err(error) => {
+            eprintln!("error in opening the file: {}", error);
+            return;
+        }
+    };
+
+    let mut contents = String::new();
+    match file.read_to_string(&mut contents) {
+        Ok(_) => (),
+        Err(error) => {
+            eprintln!("Error reading the file: {}", error);
+            return;
+        }
+    };
+
+    if contents.contains(&task) {
+        println!("task is found");
+    } else {
+        println!("task is not found");
+    }
 }
 
 fn delete_items() {
@@ -43,10 +77,10 @@ fn add_items() {
     match choice.as_str() {
         "y" => {
             view_items();
-        },
+        }
         "n" => {
             menu_list();
-        },
+        }
         _ => {
             println!("invalid choice, sending you back to the main menu!");
             menu_list();
