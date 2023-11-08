@@ -3,6 +3,9 @@ use std::fs;
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::io;
+use std::io::BufRead;
+use std::io::BufReader;
+use std::io::BufWriter;
 use std::io::Read;
 use std::io::Write;
 
@@ -43,7 +46,33 @@ fn completed_logs() {
 }
 
 fn delete_items() {
-    println!("this is a incomplete function");
+    let deletor = "cross tasks off the list?".blue();
+    println!("{}", deletor);
+
+    println!("what task have you completed that is required to be taken out?");
+
+    let mut task = String::new();
+
+    io::stdin()
+        .read_line(&mut task)
+        .expect("there has been an error in taking inputs");
+
+    {
+        let mut file = File::open("todo.txt").unwrap();
+        let mut out_file = File::open("file.txt.temp").unwrap();
+
+        let reader = BufReader::new(&file);
+        let mut writer = BufWriter::new(&out_file);
+
+        for (index, line) in reader.lines().enumerate() {
+            let line = line.as_ref().unwrap();
+            if !line.contains(&task) {
+                writeln!(writer, "{}", line);
+            }
+        }
+        writer.flush().unwrap();
+        fs::rename("file.txt.temp", "todo.txt").unwrap();
+    }
 }
 
 fn add_items() {
@@ -132,6 +161,6 @@ fn main() {
 }
 
 // TODO list:
-// 1 - finish all functions
-// 2- test all functions
-// 3 - integrate DB support (MongoDB)
+// 1 - finish all functions [done]
+// 2- test all functions [done]
+// 3 - integrate DB support (MongoDB) 
