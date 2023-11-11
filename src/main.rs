@@ -1,10 +1,10 @@
-mod task_manager;
-
+mod mongo_db;
 
 fn main() {
     println!("Hello welcome to the todoifier!");
     println!("what would you like to do today?");
-    task_manager::menu_list();
+    println!("testing this file!");
+    mongo_db::mongo_time();
 }
 
 // TODO list:
